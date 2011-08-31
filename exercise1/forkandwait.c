@@ -14,12 +14,15 @@ int main()
     if(pid==0) {
         printf("Child process executing\n");
         printf("\tChild process pid is %d \n",getpid());
+        int parent=getppid();
         printf("\tParent of child process pid is %d\n",getppid());
+        kill(parent,9);
+        sleep(45);
+        printf("Parent after killing process %d\n ",getppid()); 
         return_value=255;
         exit(return_value);
     }
     else {
-        wait(&return_value);
         /* Without wait, child and parent statements get interleaved (like
            two separate threads). Wait ensures that parent process execution
            proceeds only once the child process have finished executing
@@ -32,6 +35,7 @@ int main()
            8 bits of the return value, hence it will be return correct values
            for numbers greater than 255
         */
+        wait(&return_value);
     }
     return 0;
 }
